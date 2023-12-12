@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
   const headerToken = req.headers.authorization
     let token;
-    console.log(`headerToken: ${headerToken}`)
+    
     if(headerToken){
         const splited_token =  headerToken.toString().split(" ")
         if(splited_token[0] === "Bearer"){
@@ -16,20 +16,20 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
                     token = inside_token;
                 }
             })
-            console.log(`token: ${token}`)
+            
         }
         else{
             return next(new ErrorHandler("Please login to access the resource", 401))
         }
         if(!token){
-          console.log(`token: ${token}`)
+          
           return next(new ErrorHandler("Please login to access the resource", 401))
         }
     }else{
       return next(new ErrorHandler("Please login to access the resource", 401))
     }
 
-  console.log("Reached here-------------")
+  
 
   const decodedData = jwt.verify(token, process.env.JWT_SECRET);
   req.user = await User.findById(decodedData.id);
